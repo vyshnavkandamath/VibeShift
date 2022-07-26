@@ -1,7 +1,8 @@
-from flask import Flask, redirect, render_template, url_for, request, session
+from flask import Flask, jsonify, redirect, render_template, url_for, request, session
 import spotipy, json
 from spotipy.oauth2 import SpotifyOAuth
 import time
+from sqlalchemy import null
 
 
 
@@ -12,7 +13,7 @@ import time
 app = Flask(__name__, static_folder='static', template_folder='template')
 
 
-#------------------------------------------------------------------------SPOTIFY API TOKEN SETUP-----------------------------------------------------------------------------------#
+#------------------------------------------------------------------------APP TOKEN SETUP-----------------------------------------------------------------------------------#
 
 
 app.secret_key = "TBD key value"
@@ -84,18 +85,45 @@ def home():
    return render_template('index.html')
 
 
+@app.route('/musicrec')
+def musicRecommendation():
+    return render_template('musicrec.html')
 
-
-
-
-#------------------------------------------------------------------------API FUNCTIONS AND ENDPOINTS-----------------------------------------------------------------------------------#
-
-# @app.route("/location")
-# def getLocation():
-
+    
+    
     
 
 
+#------------------------------------------------------------------------API FUNCTIONS AND ENDPOINTS-----------------------------------------------------------------------------------#
+   
+#This function retrieves the data from the form
+@app.route('/locationData', methods=['GET', 'POST'])
+def locationData():
+    if request.method == 'POST':
+        try:
+            location = request.form.get('q')
+            print(location)
+
+            if((location != '')):
+                return jsonify({"response" : "Success" }), 202
+            else:
+                return  jsonify(message='invalid input error'),500
+        except:
+            return 'request.method is not POST. Check JavaScript Route'
+        
+
+# @app.route('/createRecs', methods=['GET', 'POST'])
+
+
+
+
+    # location = request.get_data('q')
+    # print(location)
+    # if(location != None):
+    #     return jsonify({"response" : "Success" }), 202
+    # else:
+    #      return  jsonify(message='invalid input error'),500
+    
 
 
 
