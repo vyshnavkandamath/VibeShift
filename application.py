@@ -1,13 +1,9 @@
 from flask import Flask, jsonify, redirect, render_template, url_for, request, session
+import requests
 import spotipy, json
 from spotipy.oauth2 import SpotifyOAuth
 import time
 from sqlalchemy import null
-
-
-
-
-
 
 
 app = Flask(__name__, static_folder='static', template_folder='template')
@@ -19,7 +15,7 @@ app = Flask(__name__, static_folder='static', template_folder='template')
 app.secret_key = "TBD key value"
 app.config['SESSION_COOKIE_NAME'] = 'User'
 TOKEN_INFO = "token_info"
-
+WEATHER_API_KEY = 'Weather API secret key value'
 
 
 #------------------------------------------------------------------------SPOTIFY API AUTHENTICATION-----------------------------------------------------------------------------------#
@@ -94,7 +90,7 @@ def musicRecommendation():
     
 
 
-#------------------------------------------------------------------------API FUNCTIONS AND ENDPOINTS-----------------------------------------------------------------------------------#
+#------------------------------------------------------------------------ WEATHER API FUNCTIONS AND ENDPOINTS-----------------------------------------------------------------------------------#
    
 #This function retrieves the data from the form
 @app.route('/locationData', methods=['GET', 'POST'])
@@ -102,17 +98,63 @@ def locationData():
     if request.method == 'POST':
         try:
             location = request.form.get('q')
-            print(location)
+            #print(location)
+            locationAPIStatus = getWeatherAPIStatus(location) #Gets
+            #print(locationAPIStatus)
+            locationCurrent = getWeatherTemperature(location)
+            print(locationCurrent)
 
-            if((location != '')):
+            if((location != '') and (locationAPIStatus != 400)):
                 return jsonify({"response" : "Success" }), 202
             else:
-                return  jsonify(message='invalid input error'),500
+                return  jsonify(message='Location Does Not Exist or Input Not Entered Correctly. Try Again'),500
         except:
             return 'request.method is not POST. Check JavaScript Route'
         
 
-# @app.route('/createRecs', methods=['GET', 'POST'])
+
+#Gets the Weather Data JSON based on the location the user has passed and returns the Status
+# @app.route('/getWeather', methods=['GET', 'POST'])
+def getWeatherAPIStatusCode(locationInfo):
+    url = "http://api.weatherapi.com/v1/current.json"
+    querystring = {"q": locationInfo}
+    headers = {
+	     "key": "Weather API secret key value"
+    }
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    #print(response.text)
+    return response.status_code
+        
+#Gets Weather Data as a JSON
+def getWeatherJSONData(locationInfo):
+    url = "http://api.weatherapi.com/v1/current.json"
+    querystring = {"q": locationInfo}
+    headers = {
+	     "key": "Weather API secret key value"
+    }
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    #print(response.text)
+    return response.text
+
+
+#Parses the JSON to find the temperature in Fahrenheit and returns the value as a string
+def getWeatherTemperature(locationInfo):
+    url = "http://api.weatherapi.com/v1/current.json"
+    querystring = {"q": locationInfo}
+    headers = {
+	     "key": "Weather API secret key value"
+    }
+    response = requests.request("GET", url, headers=headers, params=querystring)
+
+    if(response.status_code == 200):
+        jsonResponse = response.json()
+        return jsonResponse['current']['temp_f']
+    else:
+        return 'could not find temperature since status code is invalid'
+
+#------------------------------------------------------------------------ SPOTIFY API FUNCTIONS AND ENDPOINTS-----------------------------------------------------------------------------------#
+   
+
 
 
 
