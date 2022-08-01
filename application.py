@@ -1,9 +1,12 @@
+from crypt import methods
 from flask import Flask, jsonify, redirect, render_template, url_for, request, session
+from httplib2 import Authentication
 import requests
 import spotipy, json
 from spotipy.oauth2 import SpotifyOAuth
 import time
 from sqlalchemy import null
+from stripe import client_id
 
 
 app = Flask(__name__, static_folder='static', template_folder='template')
@@ -16,6 +19,10 @@ app.secret_key = "TBD key value"
 app.config['SESSION_COOKIE_NAME'] = 'User'
 TOKEN_INFO = "token_info"
 WEATHER_API_KEY = 'Weather API secret key value'
+
+
+
+
 
 
 #------------------------------------------------------------------------SPOTIFY API AUTHENTICATION-----------------------------------------------------------------------------------#
@@ -91,18 +98,22 @@ def musicRecommendation():
 
 
 #------------------------------------------------------------------------ WEATHER API FUNCTIONS AND ENDPOINTS-----------------------------------------------------------------------------------#
-   
-#This function retrieves the data from the form
+#This function retrieves the data from the form -- ****POST route Endpoint****
 @app.route('/locationData', methods=['GET', 'POST'])
 def locationData():
+    
     if request.method == 'POST':
         try:
             location = request.form.get('q')
             #print(location)
-            locationAPIStatus = getWeatherAPIStatus(location) #Gets
+            locationAPIStatus = getWeatherAPIStatusCode(location) #Gets
             #print(locationAPIStatus)
             locationCurrent = getWeatherTemperature(location)
             print(locationCurrent)
+
+            locationCondition = getWeatherCondition(location)
+            print(locationCondition)
+
 
             if((location != '') and (locationAPIStatus != 400)):
                 return jsonify({"response" : "Success" }), 202
@@ -110,7 +121,16 @@ def locationData():
                 return  jsonify(message='Location Does Not Exist or Input Not Entered Correctly. Try Again'),500
         except:
             return 'request.method is not POST. Check JavaScript Route'
-        
+
+# @app.route('/storeLocation', methods=['GET', 'POST'])
+# def storeLocation():
+#     if request.method == 'POST':
+#         try:
+#             location = request.form.get('q')
+#             print(location)
+#             return jsonify(location)
+#         except:
+#             return 'Could not return the location'
 
 
 #Gets the Weather Data JSON based on the location the user has passed and returns the Status
@@ -152,11 +172,151 @@ def getWeatherTemperature(locationInfo):
     else:
         return 'could not find temperature since status code is invalid'
 
+
+def getWeatherCondition(locationInfo):
+    url = "http://api.weatherapi.com/v1/current.json"
+    querystring = {"q": locationInfo}
+    headers = {
+	     "key": "Weather API secret key value"
+    }
+    response = requests.request("GET", url, headers=headers, params=querystring)
+
+    if(response.status_code == 200):
+        jsonResponse = response.json()
+        return jsonResponse['current']['condition']['text']
+    else:
+        return 'could not find condition since status code is invalid'
+    
+
 #------------------------------------------------------------------------ SPOTIFY API FUNCTIONS AND ENDPOINTS-----------------------------------------------------------------------------------#
-   
+
+AUTH_URL = 'https://accounts.spotify.com/api/token' #Spotiy Auth URL
+CLIENT_ID = 'Client id'
+CLIENT_SECRET = 'Client secret'
+
+auth_response = requests.post(AUTH_URL, {
+    'grant_type': 'client_credentials',
+    'client_id': CLIENT_ID,
+    'client_secret': CLIENT_SECRET,
+})
+
+# convert the response to JSON
+auth_response_data = auth_response.json()
+
+# save the access token
+access_token = auth_response_data['access_token']
+
+@app.route('/playlistInfo', methods=['GET', 'POST'])
+def getPlaylistName():
+    print('going in')
+    global locationD
+    if request.method == 'POST':
+        locationD = request.form.get('location')
+        print(locationD)
+        return jsonify({"response" : "Success" }), 202
+    
+    if request.method == 'GET':
+        print(locationD)
+        place = locationD
+        result = getWeatherPlaylist(place) 
+        return jsonify(result)
+
+
+#This is the main route for retrieving playlist based on weather
+def getWeatherPlaylist(locationInfo):
+    if(getWeatherCondition(locationInfo) == 'Sunny' or getWeatherCondition(locationInfo) == 'Clear'):
+        return sunnyWeatherPlaylists()
+    elif(getWeatherCondition(locationInfo) == 'Overcast' or getWeatherCondition(locationInfo) == 'Rain'):
+        return overcastWeatherPlaylists() 
+    elif(getWeatherCondition(locationInfo) == 'Partly cloudy' or getWeatherCondition(locationInfo) == 'Partly clear' or getWeatherCondition(locationInfo) == 'Mostly clear'):
+        return partlyCloudyPlaylists()
+    elif(getWeatherCondition(locationInfo) == 'Showers' or getWeatherCondition(locationInfo) == 'Mist' or getWeatherCondition(locationInfo) == 'Light rain'):
+        return showerWeatherPlaylists() 
+    else:
+        return 'Some Random Playlist Decided Later'
 
 
 
+##### Sunny Playlist: Soak Up The Sun
+##### Party Cloudy Playlist: just hits.
+##### Overcast Cloudy Playlist: Are n Be?
+##### Showers Playlist: Chilled RnB
+
+
+
+
+
+# Returns Playlist Name of Sunny Weather Linked Playlist
+def sunnyWeatherPlaylists():
+    try:
+        
+        base_url = 'https://api.spotify.com/v1/'
+        playlist_id = '37i9dQZF1DX6ALfRKlHn1t'
+
+        headers = {
+            'Authorization': 'Bearer {token}'.format(token=access_token)
+        }
+        response = requests.get(base_url + "playlists/" + playlist_id, headers=headers)
+        responseJson = response.json()
+        return responseJson['name']
+           
+        
+    except:
+        return "Didn't Get Playlist Data"
+
+
+# Returns Playlist Name of Overcast Weather Linked Playlist
+def overcastWeatherPlaylists():
+    try:
+        
+        base_url = 'https://api.spotify.com/v1/'
+        playlist_id = '37i9dQZF1DXa9xHlDa5fc6'
+
+        headers = {
+            'Authorization': 'Bearer {token}'.format(token=access_token)
+        }
+        response = requests.get(base_url + "playlists/" + playlist_id, headers=headers)
+        responseJson = response.json()
+        return responseJson['name']
+           
+    except:
+        return "Didn't Get Playlist Data"
+
+
+def partlyCloudyPlaylists():
+    try:
+        base_url = 'https://api.spotify.com/v1/'
+        playlist_id = '37i9dQZF1DXcRXFNfZr7Tp'
+
+        headers = {
+            'Authorization': 'Bearer {token}'.format(token=access_token)
+        }
+        response = requests.get(base_url + "playlists/" + playlist_id, headers=headers)
+        responseJson = response.json()
+        return responseJson['name']
+           
+
+    except:
+        return "Didn't Get Playlist Data"
+
+
+def showerWeatherPlaylists():
+    try:
+        
+        base_url = 'https://api.spotify.com/v1/'
+        playlist_id = '37i9dQZF1DX2UgsUIg75Vg'
+
+        headers = {
+            'Authorization': 'Bearer {token}'.format(token=access_token)
+        }
+        response = requests.get(base_url + "playlists/" + playlist_id, headers=headers)
+        responseJson = response.json()
+        return responseJson['name']
+           
+        
+
+    except:
+        return "Didn't Get Playlist Data"
 
 
     # location = request.get_data('q')

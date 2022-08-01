@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,13 +15,69 @@
         crossorigin="anonymous"></script>
     <title>Document</title>
 </head>
+
 <body>
     This is where the music reqs are posted
-    
+
+
+
+    <script>
+
+        let inputData;
+
+        $(document).ready(function () {
+            inputData = sessionStorage.getItem('locationInput')
+            $.ajax({
+
+                url: '/playlistInfo',
+                type: 'POST',
+                data: {
+                    'location': inputData,
+                },
+                headers: {
+                    "key": "Weather API secret Key value"
+                },
+                dataType: 'json',
+                success: function (data) {
+                    // alert('Data: ' + JSON.stringify(data));
+                    console.log(data);
+
+                },
+                error: function (request, error) {
+                    // alert("Request: " + JSON.stringify(request));
+                    alert('Did not input value correctly, try again' + request.responseJSON.message());
+                }
+
+            });
+
+            $.ajax({
+
+                url: '/playlistInfo',
+                type: 'GET',
+                headers: {
+                    "key": "Weather API secret Key value"
+                },
+                dataType: 'json',
+                success: function (data) {
+                    alert('Data: ' + JSON.stringify(data));
+                },
+                error: function (request, error) {
+                    alert("Request: " + JSON.stringify(request));
+                }
+
+            });
+
+
+
+
+        })
+    </script>
+
 
 
 
 
 
 </body>
+
 </html>
