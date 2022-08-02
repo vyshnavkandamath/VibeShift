@@ -221,6 +221,20 @@ def getPlaylistName():
         result = getWeatherPlaylist(place) 
         return jsonify(result)
 
+# @app.route('/playlistImage', method=['GET', 'POST'])
+def getPlaylistImage(playlistID):
+    base_url = 'https://api.spotify.com/v1/'
+        
+    headers = {
+        'Authorization': 'Bearer {token}'.format(token=access_token)
+    }
+    response = requests.get(base_url + "playlists/" + playlistID + "/images", headers=headers)
+    responseJson = response.json()
+    return responseJson['url']
+           
+    
+    
+
 
 #This is the main route for retrieving playlist based on weather
 def getWeatherPlaylist(locationInfo):
@@ -252,13 +266,16 @@ def sunnyWeatherPlaylists():
         
         base_url = 'https://api.spotify.com/v1/'
         playlist_id = '37i9dQZF1DX6ALfRKlHn1t'
+    
+
 
         headers = {
             'Authorization': 'Bearer {token}'.format(token=access_token)
         }
         response = requests.get(base_url + "playlists/" + playlist_id, headers=headers)
         responseJson = response.json()
-        return responseJson['name']
+        #return responseJson['name']
+        return responseJson
            
         
     except:
@@ -277,7 +294,8 @@ def overcastWeatherPlaylists():
         }
         response = requests.get(base_url + "playlists/" + playlist_id, headers=headers)
         responseJson = response.json()
-        return responseJson['name']
+        #return responseJson['name']
+        return responseJson
            
     except:
         return "Didn't Get Playlist Data"
@@ -293,7 +311,8 @@ def partlyCloudyPlaylists():
         }
         response = requests.get(base_url + "playlists/" + playlist_id, headers=headers)
         responseJson = response.json()
-        return responseJson['name']
+        #return responseJson['name']
+        return responseJson
            
 
     except:
@@ -305,13 +324,15 @@ def showerWeatherPlaylists():
         
         base_url = 'https://api.spotify.com/v1/'
         playlist_id = '37i9dQZF1DX2UgsUIg75Vg'
+       
 
         headers = {
             'Authorization': 'Bearer {token}'.format(token=access_token)
         }
         response = requests.get(base_url + "playlists/" + playlist_id, headers=headers)
         responseJson = response.json()
-        return responseJson['name']
+        #return responseJson['name']
+        return responseJson
            
         
 

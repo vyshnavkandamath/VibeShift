@@ -1,0 +1,243 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+
+html{
+    font-size: 10px;
+}
+
+body{
+    background-color: #000;
+}
+
+.slideshow {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    
+}
+
+.slideshow-item{
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    opacity: 0;
+    animation: cycleImages 31s infinite;
+}
+
+
+
+.slideshow-item img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: zoom 31s infinite;
+
+}
+
+.slideshow-item:nth-child(1),
+.slideshow-item:nth-child(1) img {
+    animation-delay: 0s;
+
+}
+
+.slideshow-item:nth-child(2),
+.slideshow-item:nth-child(2) img {
+    animation-delay: 10s;
+
+}
+
+.slideshow-item:nth-child(3),
+.slideshow-item:nth-child(3) img {
+    animation-delay: 20s;
+
+}
+
+
+
+
+/* .slideshow-item-text{
+    max-width: 50%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,.8);
+    color: #fff;
+    padding: 10rem 5rem;
+
+}
+
+.slideshow-item-text h5{
+    font-size: 5rem;
+    font-family: 'Raleway', 'san-serif';
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 2.5rem;
+
+    
+}
+
+.slideshow-item-text p{
+    font-size: 1.6rem;
+    font-family: 'Roboto', 'san-serif';
+    letter-spacing: 1px;
+    font-weight: 300;
+
+} */
+
+/* This it the box where users can type in their zip-code */
+.user {
+    max-width: 50%;
+    height: 40%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,.8);
+    color: #fff;
+    padding: 10rem 5rem;
+    z-index: 1;
+
+}
+
+.user h5 {
+    font-size: 5rem;
+    font-family: 'Raleway', 'san-serif';
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 2.5rem;
+}
+
+.user p{
+    font-size: 1.6rem;
+    font-family: 'Roboto', 'san-serif';
+    letter-spacing: 1px;
+    font-weight: 300;
+    overflow: hidden;
+}
+
+
+.form {
+    max-width: 50%;
+    position: fixed;
+    height: 40%;
+    top: 50%;
+    left: 0;
+    transform: translate(-50%);
+    z-index: 2;
+   
+
+}
+
+/* .user input {
+    width: 100%;
+    height: 100%;
+    color: #595f6e;
+    padding-top: 20px;
+    border: none;
+    outline: none;
+
+
+}
+
+.user label {
+    position: relative;
+    bottom: 0px;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-bottom: 1px solid white;
+
+}
+
+.user label::after {
+    content: "";
+    position: absolute;
+    left: 0px;
+    bottom: -1px;
+    height: 100%;
+    width: 100%;
+    border-bottom: 3px solid #5fa8d3;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.content-name {
+    position: absolute;
+    bottom: 5px;
+    left: 0px;
+    transition: all 0.3s ease;
+
+}
+
+.user input:focus + .label-name .content-name, .user input:valid + .label-name .content-name{
+    transform: translateY(-150%);
+    font-size: 14px;
+    color: #5fa8d3;
+}
+
+.user input:focus .label-name::after, .user input:valid + .label-name::after{
+    transform: translateX(0%);
+} */
+
+
+@keyframes cycleImages{
+    25%{
+        opacity: 100;
+    }
+    40%{
+        opacity: 100;
+    }
+
+}
+
+@keyframes zoom{
+    100%{
+        transform: scale(1.0)
+    }
+}
+
+
+@media screen and (max-width: 1000px){
+    .user{
+        max-width: 70%;
+        padding: 5rem 1rem;
+    
+    }
+
+    .user h5{
+        font-size: 4rem;
+        
+    }
+    
+
+}
+
+@media screen and (max-width: 767px){
+    .user{
+        max-width: 100%;
+        padding: 2rem;
+        top: initial;
+        bottom: 0;
+        transform: initial;
+    
+    }
+
+    .user h5{
+        font-size: 3rem;
+        
+    }
+
+    .user p{
+        font-size: 1.4rem;
+        
+    }
+    
+
+}
