@@ -7,7 +7,7 @@ from spotipy.oauth2 import SpotifyOAuth
 import time
 from sqlalchemy import null
 from stripe import client_id
-
+from spotipy.oauth2 import SpotifyClientCredentials
 
 app = Flask(__name__, static_folder='static', template_folder='template')
 
@@ -200,11 +200,46 @@ auth_response = requests.post(AUTH_URL, {
     'client_secret': CLIENT_SECRET,
 })
 
+
 # convert the response to JSON
 auth_response_data = auth_response.json()
 
 # save the access token
 access_token = auth_response_data['access_token']
+
+
+
+
+
+# @app.route('/current_user' , methods=['GET'])
+# def current_user():
+#     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
+#     auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+#     if not auth_manager.validate_token(cache_handler.get_cached_token()):
+#         return redirect('/')
+#     spotify = spotipy.Spotify(auth_manager=auth_manager)
+#     return spotify.current_user()
+
+#Using the sessions, it retrieves the data and profile of the current_user
+@app.route('/userProfile', methods=['GET','POST'])
+def getUserProfile():
+    tokenResponse = get_token()
+    print(get_token())
+    accessToken = tokenResponse['access_token']
+
+    base_url = 'https://api.spotify.com/v1/'
+
+        
+    headers = {
+        'Authorization': 'Bearer {token}'.format(token=accessToken)
+    }
+    response = requests.get(base_url + "me", headers=headers)
+    responseJson = response.json()
+    return responseJson
+
+
+
+
 
 @app.route('/playlistInfo', methods=['GET', 'POST'])
 def getPlaylistName():
@@ -216,10 +251,12 @@ def getPlaylistName():
         return jsonify({"response" : "Success" }), 202
     
     if request.method == 'GET':
-        print(locationD)
+        
         place = locationD
         result = getWeatherPlaylist(place) 
         return jsonify(result)
+
+
 
 # @app.route('/playlistImage', method=['GET', 'POST'])
 def getPlaylistImage(playlistID):
@@ -238,6 +275,11 @@ def getPlaylistImage(playlistID):
 
 #This is the main route for retrieving playlist based on weather
 def getWeatherPlaylist(locationInfo):
+    rain = 'rain'
+    shower = 'shower'
+    thunder = 'thunder'
+    patches = 'patches'
+    snow = 'snow'
     if(getWeatherCondition(locationInfo) == 'Sunny' or getWeatherCondition(locationInfo) == 'Clear'):
         return sunnyWeatherPlaylists()
     elif(getWeatherCondition(locationInfo) == 'Overcast' or getWeatherCondition(locationInfo) == 'Rain'):
@@ -246,6 +288,8 @@ def getWeatherPlaylist(locationInfo):
         return partlyCloudyPlaylists()
     elif(getWeatherCondition(locationInfo) == 'Showers' or getWeatherCondition(locationInfo) == 'Mist' or getWeatherCondition(locationInfo) == 'Light rain'):
         return showerWeatherPlaylists() 
+    elif(rain in getWeatherCondition(locationInfo) or shower in getWeatherCondition(locationInfo) or thunder in getWeatherCondition(locationInfo)  or patches in getWeatherCondition(locationInfo)  or snow in getWeatherCondition(locationInfo) ):
+        return showerWeatherPlaylists()
     else:
         return 'Some Random Playlist Decided Later'
 
@@ -267,8 +311,6 @@ def sunnyWeatherPlaylists():
         base_url = 'https://api.spotify.com/v1/'
         playlist_id = '37i9dQZF1DX6ALfRKlHn1t'
     
-
-
         headers = {
             'Authorization': 'Bearer {token}'.format(token=access_token)
         }

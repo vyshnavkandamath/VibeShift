@@ -57,6 +57,25 @@ body{
 
 }
 
+.slideshow-item:nth-child(4),
+.slideshow-item:nth-child(4) img {
+    animation-delay: 30s;
+
+}
+
+.slideshow-item:nth-child(5),
+.slideshow-item:nth-child(5) img {
+    animation-delay: 40s;
+
+}
+
+.slideshow-item:nth-child(1),
+.slideshow-item:nth-child(1) img {
+    animation-delay: 0s;
+
+}
+
+
 
 
 
@@ -194,6 +213,7 @@ body{
     40%{
         opacity: 100;
     }
+    
 
 }
 
