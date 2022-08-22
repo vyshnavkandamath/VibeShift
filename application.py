@@ -79,13 +79,75 @@ def create_spotify_oauth():
         client_id = 'TBD Spotify client id',
         client_secret = 'TBD Spotify client secret',
         redirect_uri = url_for('redirectPage', _external=True),
-        scope='user-library-read')
+        scope='user-read-private')
+
+# API_BASE = 'https://accounts.spotify.com'
+# SCOPE = 'user-library-read' 
+# REDIRECT_URI = 'http://127.0.0.1:5000/redirect'
+# SHOW_DIALOG = True
+# CLI_ID = 'Spotify client id'
+# CLI_SEC = 'Spotify client secret'
+
+# @app.route("/")
+# def verify():
+#     auth_url = f'{API_BASE}/authorize?client_id={CLI_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPE}&show_dialog={SHOW_DIALOG}'
+#     print(auth_url)
+#     return redirect(auth_url)
+
+# @app.route("/api_callback")
+# def api_callback():
+#     session.clear()
+#     code = request.args.get('code')
+
+#     auth_token_url = f"{API_BASE}/api/token"
+#     res = requests.post(auth_token_url, data={
+#         "grant_type":"authorization_code",
+#         "code":code,
+#         "redirect_uri":"http://127.0.0.1:5000/api_callback",
+#         "client_id":CLI_ID,
+#         "client_secret":CLI_SEC
+#         })
+
+#     res_body = res.json()
+#     print(res.json())
+#     session["toke"] = res_body.get("access_token")
+
+#     return redirect(url_for("home"))
+
+# @app.route("/go", methods=['POST'])
+# def go():
+#     data = request.form    
+#     sp = spotipy.Spotify(auth=session['toke'])
+#     response = sp.current_user()
+#     return render_template("results.html", data=data)
+
+
+
+
+#Using the sessions, it retrieves the data and profile of the current_user
+@app.route('/userProfile', methods=['GET','POST'])
+def getUserProfile():
+    tokenResponse = get_token()
+    print(tokenResponse)
+    
+    accessToken = tokenResponse['access_token']
+
+    base_url = 'https://api.spotify.com/v1/'
+
+        
+    headers = {
+        'Authorization': 'Bearer {token}'.format(token=accessToken)
+    }
+    response = requests.get(base_url + "me", headers=headers)
+    responseJson = response.json()
+    return responseJson
+
 
 #------------------------------------------------------------------------PROJECT PAGES AND ROUTES-----------------------------------------------------------------------------------#
 
 @app.route('/home')
 def home():
-   return render_template('index.html')
+    return render_template('index.html')
 
 
 @app.route('/musicrec')
@@ -188,7 +250,7 @@ def getWeatherCondition(locationInfo):
         return 'could not find condition since status code is invalid'
     
 
-#------------------------------------------------------------------------ SPOTIFY API FUNCTIONS AND ENDPOINTS-----------------------------------------------------------------------------------#
+#------------------------------------------------------------------------ SPOTIFY API FUNCTIONS AND ENDPOINTS FOR PLAYLISTS-----------------------------------------------------------------------------------#
 
 AUTH_URL = 'https://accounts.spotify.com/api/token' #Spotiy Auth URL
 CLIENT_ID = 'Client id'
@@ -220,41 +282,27 @@ access_token = auth_response_data['access_token']
 #     spotify = spotipy.Spotify(auth_manager=auth_manager)
 #     return spotify.current_user()
 
-#Using the sessions, it retrieves the data and profile of the current_user
-@app.route('/userProfile', methods=['GET','POST'])
-def getUserProfile():
-    tokenResponse = get_token()
-    print(get_token())
-    accessToken = tokenResponse['access_token']
-
-    base_url = 'https://api.spotify.com/v1/'
-
-        
-    headers = {
-        'Authorization': 'Bearer {token}'.format(token=accessToken)
-    }
-    response = requests.get(base_url + "me", headers=headers)
-    responseJson = response.json()
-    return responseJson
 
 
 
 
-
-@app.route('/playlistInfo', methods=['GET', 'POST'])
+#Retrieves the Playlist Info based on location's weather
+@app.route('/playlistInfo', methods=['POST'])
 def getPlaylistName():
     print('going in')
-    global locationD
     if request.method == 'POST':
         locationD = request.form.get('location')
         print(locationD)
-        return jsonify({"response" : "Success" }), 202
-    
-    if request.method == 'GET':
-        
         place = locationD
-        result = getWeatherPlaylist(place) 
+        result = getWeatherPlaylist(place)
+        # return jsonify({"response" : "Success" }), 202
         return jsonify(result)
+    
+    # if request.method == 'GET':
+        
+    #     place = locationD
+    #     result = getWeatherPlaylist(place) 
+    #     return jsonify(result)
 
 
 

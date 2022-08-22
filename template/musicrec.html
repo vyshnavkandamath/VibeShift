@@ -5,36 +5,130 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/musicrec.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/musicrec.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
         crossorigin="anonymous"></script>
-    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
 
+    <title>Document</title>
 </head>
 
 
 
 <body onload="loadData()">
-    
 
-    <div class="welcome">
+
+    <header>
+        <div class="collapse bg-dark" id="navbarHeader">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-md-7 py-4">
+                        <h4 class="text-white">About</h4>
+                        <p class="text-muted">VibeShift is a music application that generates playlists based on
+                            geographic weather data. This application
+                            uses SpotifyAPI and WeatherAPI to generate different recommendations.
+                        </p>
+                    </div>
+                    <div class="col-sm-4 offset-md-1 py-4">
+                        <h4 class="text-white">Contact</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="https://www.linkedin.com/in/vyshnav-kandamath-b39004233/" class="text-white">Check out my LinkedIn</a></li>
+                            <li><a href="https://vyshnavkandamath.github.io/Vyshnav_Portfolio/" class="text-white">Check out my Portfolio</a></li>
+                            <li><a href="https://github.com/vyshnavkandamath" class="text-white">github</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2"
+                        viewBox="0 0 24 24">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                        </path>
+                        <!-- <circle cx="12" cy="13" r="4"></circle> -->
+                        
+                    </svg>
+                    <strong>VibeShift</strong>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
+                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="fw-light">Here's your spotify recommendations for the location: <span id="LocationName">
+                    </h1>
+                        <a href="home" class="btn btn-primary my-2">Enter a New Location</a>
+                        <!-- <a href="#" class="btn btn-secondary my-2">Visit Spotify</a> -->
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="col-lg-4 text-center container">
+                <a href='' class='playlistpic' id='PlaylistImageLink'><img src='' id="PlaylistImage" alt="'image of playlist"></a>
+                <title>Placeholder</title>
+                
+            
+
+            <h2 class="fw-normal"><span id="PlaylistName"></span></h2>
+            <p><span id='PlaylistDescription'></span></p>
+            <p><a class=" btn btn-secondary" id="PlaylistButtonLink" href=''>Listen on Spotify»</a></p>
+        </div>
+
+    </main>
+
+    <footer class="text-muted py-5">
+        <div class="container">
+            <p class="float-end mb-1">
+                <a href="#">Back to top</a>
+            </p>
+            <p class="mb-1">This project was programmed using Python and Javascript and designed using HTML5,
+                CSS3, and Bootstrap </p>
+            <p class="mb-0">Created by Vyshnav Kandamath <a href="https://vyshnavkandamath.github.io/Vyshnav_Portfolio/">Visit my portfolio</a> or check out my <a
+                    href="https://www.linkedin.com/in/vyshnav-kandamath-b39004233/">LinkedIn</a>.</p>
+        </div>
+    </footer>
+
+
+    <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
+
+
+
+
+
+    <!-- <div class="welcome">
         
         <h1>Welcome <span id="ProfileName"></span></h1>
-        <img src id="ProfileImage" alt="profile pic of user">
-        
-        <h1>Here's your spotify recommendations</h1>
-        <a href='' class='playlistpic' id='PlaylistLink'><img src='' id="PlaylistImage" alt="'image of playlist"></a>
-        <h1>The Playlist Recommendation for you is: <span id="PlaylistName"></span></h1>
-        
-    </div>
+        <img src id="ProfileImage" alt="profile pic of user"> -->
+<!-- 
+    <h1>Here's your spotify recommendations for the location <span id="LocationName"></span> </h1>
+    <a href='' class='playlistpic' id='PlaylistLink'><img src='' id="PlaylistImage" alt="'image of playlist"></a>
+    <h1>The Playlist Recommendation for you is: <span id="PlaylistName"></span></h1> -->
+    <!-- <h1>color: {{ rgb }}</h1> -->
+    </div> 
 
 
-   
+
     <!-- <a href='' id='PlaylistLink'><img src='' id="PlaylistImage" alt="'image of playlist"></a> -->
 
 
@@ -48,6 +142,7 @@
 
             $(document).ready(function () {
                 inputData = sessionStorage.getItem('locationInput')
+                document.getElementById('LocationName').innerHTML = inputData
                 $.ajax({
 
                     url: '/playlistInfo',
@@ -61,7 +156,24 @@
                     dataType: 'json',
                     success: function (data) {
                         // alert('Data: ' + JSON.stringify(data));
+
                         console.log(data);
+                        let obj = JSON.parse(JSON.stringify(data));
+                        console.log(obj);
+                        let playlistName = obj['name'];
+                        console.log(playlistName);
+                        let playlistImage = obj.images[0].url;
+                        console.log(playlistImage);
+                        let playlistImageLink = obj["external_urls"].spotify;
+                        let playlistButtonLink = obj["external_urls"].spotify;
+                    
+                        let playlistDescription = obj['description']
+
+                        document.getElementById('PlaylistName').innerHTML = playlistName;
+                        document.getElementById('PlaylistImage').src = playlistImage;
+                        document.getElementById('PlaylistImageLink').href = playlistImageLink;
+                        document.getElementById('PlaylistButtonLink').href = playlistButtonLink;
+                        document.getElementById('PlaylistDescription').innerHTML = playlistDescription
 
                     },
                     error: function (request, error) {
@@ -71,73 +183,68 @@
 
                 });
 
-                $.ajax({
+                // $.ajax({
 
-                    url: '/playlistInfo',
-                    type: 'GET',
-                    headers: {
-                        "key": "Weather API secret key value"
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        // alert('Data: ' + JSON.stringify(data));
-                        console.log(data);
-                        let obj = JSON.parse(JSON.stringify(data));
-                        console.log(obj);
-                        let playlistName = obj['name'];
-                        console.log(playlistName);
-                        let playlistImage = obj.images[0].url;
-                        console.log(playlistImage);
-                        let playlistLink = obj["external_urls"].spotify;
-                        console.log(playlistLink);
+                //     url: '/playlistInfo',
+                //     type: 'GET',
+                //     headers: {
+                //        "key": "Weather API secret key value"
+                //     },
+                //     dataType: 'json',
+                //     success: function (data) {
+                //         // alert('Data: ' + JSON.stringify(data));
+                //         console.log(data);
+                //         let obj = JSON.parse(JSON.stringify(data));
+                //         console.log(obj);
+                //         let playlistName = obj['name'];
+                //         console.log(playlistName);
+                //         let playlistImage = obj.images[0].url;
+                //         console.log(playlistImage);
+                //         let playlistLink = obj["external_urls"].spotify;
+                //         console.log(playlistLink);
 
-                        document.getElementById('PlaylistName').innerHTML = playlistName;
-                        document.getElementById('PlaylistImage').src = playlistImage;
-                        document.getElementById('PlaylistLink').href = playlistLink;
-                    },
-                    error: function (request, error) {
-                        alert("Request: " + JSON.stringify(request));
-                    }
+                //         document.getElementById('PlaylistName').innerHTML = playlistName;
+                //         document.getElementById('PlaylistImage').src = playlistImage;
+                //         document.getElementById('PlaylistLink').href = playlistLink;
+                //     },
+                //     error: function (request, error) {
+                //         alert("Request: " + JSON.stringify(request));
+                //     }
 
-                });
+                // });
 
-                $.ajax({
+                // $.ajax({
 
-                    url: '/userProfile',
-                    type: 'GET',
-                    headers: {
-                        "key": "Weather API secret key value"
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        // alert('Data: ' + JSON.stringify(data));
-                        console.log(data);
-                        let obj = JSON.parse(JSON.stringify(data));
-                        let profileName = obj['display_name'];
-                        console.log(profileName);
-                        let profileImage = obj.images[0].url;
-                        console.log(profileImage);
-                    
+                //     url: '/userProfile',
+                //     type: 'GET',
+                //     headers: {
+                //        "key": "Weather API secret key value"
+                //     },
+                //     dataType: 'json',
+                //     success: function (data) {
+                //         // alert('Data: ' + JSON.stringify(data));
+                //         console.log(data);
+                //         let obj = JSON.parse(JSON.stringify(data));
+                //         let profileName = obj['display_name'];
+                //         console.log(profileName);
+                //         let profileImage = obj.images[0].url;
+                //         console.log(profileImage);
 
-                        document.getElementById('ProfileName').innerHTML = profileName;
-                        document.getElementById('ProfileImage').src = profileImage;
-                    },
-                    error: function (request, error) {
-                        alert("Request: " + JSON.stringify(request));
-                    }
 
-                });
+                //         document.getElementById('ProfileName').innerHTML = profileName;
+                //         document.getElementById('ProfileImage').src = profileImage;
+                //     },
+                //     error: function (request, error) {
+                //         alert("Request: " + JSON.stringify(request));
+                //     }
+
+                // });
 
 
 
             })
 
         }
-
-
-
-
-
     </script>
 
 
