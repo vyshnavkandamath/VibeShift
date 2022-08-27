@@ -201,9 +201,8 @@ def locationData():
 def getWeatherAPIStatusCode(locationInfo):
     url = "http://api.weatherapi.com/v1/current.json"
     querystring = {"q": locationInfo}
-    headers = {
-	     "key": "Weather API secret key value"
-    }
+    headers = {}
+    headers['key'] = os.environ['WEATHER_API_KEY']
     response = requests.request("GET", url, headers=headers, params=querystring)
     #print(response.text)
     return response.status_code
@@ -212,9 +211,9 @@ def getWeatherAPIStatusCode(locationInfo):
 def getWeatherJSONData(locationInfo):
     url = "http://api.weatherapi.com/v1/current.json"
     querystring = {"q": locationInfo}
-    headers = {
-	     "key": "Weather API secret key value"
-    }
+    headers = {}
+    headers['key'] = os.environ['WEATHER_API_KEY']
+
     response = requests.request("GET", url, headers=headers, params=querystring)
     #print(response.text)
     return response.text
@@ -224,9 +223,8 @@ def getWeatherJSONData(locationInfo):
 def getWeatherTemperature(locationInfo):
     url = "http://api.weatherapi.com/v1/current.json"
     querystring = {"q": locationInfo}
-    headers = {
-	     "key": "Weather API secret key value"
-    }
+    headers = {}
+    headers['key'] = os.environ['WEATHER_API_KEY']
     response = requests.request("GET", url, headers=headers, params=querystring)
 
     if(response.status_code == 200):
