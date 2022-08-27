@@ -8,6 +8,7 @@ import time
 from sqlalchemy import null
 from stripe import client_id
 from spotipy.oauth2 import SpotifyClientCredentials
+import os
 
 app = Flask(__name__, static_folder='static', template_folder='template')
 
@@ -76,8 +77,8 @@ def get_token():
 #OAuth function
 def create_spotify_oauth():
     return SpotifyOAuth(
-        client_id = 'TBD Spotify client id',
-        client_secret = 'TBD Spotify client secret',
+        client_id =  os.environ['SPOTIFY_CLIENT_ID'],
+        client_secret = os.environ['SPOTIFY_CLIENT_SECRET'],
         redirect_uri = url_for('redirectPage', _external=True),
         scope='user-read-private')
 
