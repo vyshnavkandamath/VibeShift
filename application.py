@@ -223,9 +223,8 @@ def getWeatherTemperature(locationInfo):
 def getWeatherCondition(locationInfo):
     url = "http://api.weatherapi.com/v1/current.json"
     querystring = {"q": locationInfo}
-    headers = {
-	     "key": "Weather API secret key value"
-    }
+    headers = {}
+    headers['key'] = os.environ['WEATHER_API_KEY']
     response = requests.request("GET", url, headers=headers, params=querystring)
 
     if(response.status_code == 200):
@@ -262,11 +261,6 @@ access_token = auth_response_data['access_token']
 #         return redirect('/')
 #     spotify = spotipy.Spotify(auth_manager=auth_manager)
 #     return spotify.current_user()
-
-
-
-
-
 #Retrieves the Playlist Info based on location's weather
 @app.route('/playlistInfo', methods=['POST'])
 def getPlaylistName():
@@ -285,8 +279,6 @@ def getPlaylistName():
     #     result = getWeatherPlaylist(place) 
     #     return jsonify(result)
 
-
-
 # @app.route('/playlistImage', method=['GET', 'POST'])
 def getPlaylistImage(playlistID):
     base_url = 'https://api.spotify.com/v1/'
@@ -297,10 +289,6 @@ def getPlaylistImage(playlistID):
     response = requests.get(base_url + "playlists/" + playlistID + "/images", headers=headers)
     responseJson = response.json()
     return responseJson['url']
-           
-    
-    
-
 
 #This is the main route for retrieving playlist based on weather
 def getWeatherPlaylist(locationInfo):
@@ -321,8 +309,6 @@ def getWeatherPlaylist(locationInfo):
         return showerWeatherPlaylists()
     else:
         return 'Some Random Playlist Decided Later'
-
-
 
 ##### Sunny Playlist: Soak Up The Sun
 ##### Party Cloudy Playlist: just hits.
