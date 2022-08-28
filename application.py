@@ -15,20 +15,11 @@ app = Flask(__name__, static_folder='static', template_folder='template')
 
 #------------------------------------------------------------------------APP TOKEN SETUP-----------------------------------------------------------------------------------#
 
-
-app.secret_key = "TBD key value"
+app.secret_key = os.environ['APP_KEY']
 app.config['SESSION_COOKIE_NAME'] = 'User'
 TOKEN_INFO = "token_info"
-WEATHER_API_KEY = 'Weather API secret key value'
-
-
-
-
-
 
 #------------------------------------------------------------------------SPOTIFY API AUTHENTICATION-----------------------------------------------------------------------------------#
-
-
 
 #Home Route Shows Authorize Page for Spotify, Where user must log in to use. 
 @app.route("/")
@@ -155,11 +146,6 @@ def home():
 def musicRecommendation():
     return render_template('musicrec.html')
 
-    
-    
-    
-
-
 #------------------------------------------------------------------------ WEATHER API FUNCTIONS AND ENDPOINTS-----------------------------------------------------------------------------------#
 #This function retrieves the data from the form -- ****POST route Endpoint****
 @app.route('/locationData', methods=['GET', 'POST'])
@@ -252,8 +238,8 @@ def getWeatherCondition(locationInfo):
 #------------------------------------------------------------------------ SPOTIFY API FUNCTIONS AND ENDPOINTS FOR PLAYLISTS-----------------------------------------------------------------------------------#
 
 AUTH_URL = 'https://accounts.spotify.com/api/token' #Spotiy Auth URL
-CLIENT_ID = 'Client id'
-CLIENT_SECRET = 'Client secret'
+CLIENT_ID =  os.environ['SPOTIFY_CLIENT_ID'],
+CLIENT_SECRET = os.environ['SPOTIFY_CLIENT_SECRET'],
 
 auth_response = requests.post(AUTH_URL, {
     'grant_type': 'client_credentials',
@@ -267,10 +253,6 @@ auth_response_data = auth_response.json()
 
 # save the access token
 access_token = auth_response_data['access_token']
-
-
-
-
 
 # @app.route('/current_user' , methods=['GET'])
 # def current_user():
@@ -346,10 +328,6 @@ def getWeatherPlaylist(locationInfo):
 ##### Party Cloudy Playlist: just hits.
 ##### Overcast Cloudy Playlist: Are n Be?
 ##### Showers Playlist: Chilled RnB
-
-
-
-
 
 # Returns Playlist Name of Sunny Weather Linked Playlist
 def sunnyWeatherPlaylists():
@@ -436,11 +414,6 @@ def showerWeatherPlaylists():
     # else:
     #      return  jsonify(message='invalid input error'),500
     
-
-
-
-
-
 # @app.route('/gettracks')
 # def getTracks():
 #     try:
@@ -463,10 +436,5 @@ def showerWeatherPlaylists():
 
 #gets the current users token 
 
-
-
-
 if __name__ == "__main__":
     app.run()
-
-
