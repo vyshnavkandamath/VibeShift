@@ -14,6 +14,7 @@ A music platform/app which recommends and generates spotify playlists based off 
 9. export SPOTIFY_CLIENT_ID=<Spotify API client id>
 10. export SPOTIFY_CLIENT_SECRET=<Spitfy API client secret>
 11. export WEATHER_API_KEY=<Weather API key>
+12. export export APP_KEY=<APP key here>
 12. python3 -m flask run
 
 Now point your browser to http://127.0.0.1:5000 to invoke the web application
