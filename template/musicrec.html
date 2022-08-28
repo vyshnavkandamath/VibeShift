@@ -131,11 +131,6 @@
 
     <!-- <a href='' id='PlaylistLink'><img src='' id="PlaylistImage" alt="'image of playlist"></a> -->
 
-
-
-
-
-
     <script>
         function loadData() {
             let inputData;
@@ -151,7 +146,7 @@
                         'location': inputData,
                     },
                     headers: {
-                        "key": "Weather API secret key value"
+			    "key": {{api_key | tojson}},
                     },
                     dataType: 'json',
                     success: function (data) {
@@ -246,12 +241,5 @@
 
         }
     </script>
-
-
-
-
-
-
 </body>
-
 </html>

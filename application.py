@@ -144,7 +144,7 @@ def home():
 
 @app.route('/musicrec')
 def musicRecommendation():
-    return render_template('musicrec.html')
+    return render_template('musicrec.html', api_key=os.environ['WEATHER_API_KEY'])
 
 #------------------------------------------------------------------------ WEATHER API FUNCTIONS AND ENDPOINTS-----------------------------------------------------------------------------------#
 #This function retrieves the data from the form -- ****POST route Endpoint****
